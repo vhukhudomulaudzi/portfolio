@@ -1,0 +1,67 @@
+ body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #242222;
+            background: #656363;
+
+        }
+        .container{
+ width:95% ;
+  height: 95%;
+  background-color: #e4dddd;
+ margin: 30px;
+ margin-top: 20px;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px 4px rgb(2, 62, 105)}
+
+        h1 {
+            font-size: 32px;
+            color: #292727;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        p {
+            color: #1f1d1d;
+            margin-bottom: 20px;
+        }
+
+        .experience-item {
+            
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .experience-item span {
+            color: #232222;
+            font-size: 14px;
+        }
+
+        .experience-item h2 {
+            color: #323131;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .experience-item p {
+            color: #242323;
+            margin-bottom: 10px;
+        }
+
+        .experience-item strong {
+            color: #292727;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: #4f4d4e;
+            color: #201f1f;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button a{color: #cbc8c8;
+        text-decoration: none;}

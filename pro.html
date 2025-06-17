@@ -1,0 +1,115 @@
+<html>
+    <head>
+        <title>vhukhudo Mulaudzi</title>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width" initial-scale="1.0">
+            <link rel="stylesheet" href="pro.css">
+            <link rel="stylesheet" href="location.css">
+             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    </head>
+<body>
+  
+<div class="container">
+    <header>
+        <div class="navbar">
+            <p>vhukhudo </p>
+         <ul>
+            <li><a href="pro.html">Home</a></li>
+             <li><a href="education.html">Education</a></li>
+            <li><a href="experience.html">Experience</a></li>
+            <li><a href="skills.html">Skills</a></li>
+            <li><a href="contact.html">Contact</a></li>
+         </ul>
+        </div>
+    </header>
+     
+    <section class="main-content">
+    <div class="details">
+        <span>Aspiring Software Developer</span>
+        <br><br>
+        <hr>
+        <br>
+      <h1>Vhukhudo Mulaudzi</h1>
+      <br>
+      <p>From Agriculture to Tech. My passion for Tech grew stronger as i was inspired by the increasing number of women joing Tech. I have finally joined a Software Developing Programme and looking forward to this journey of becoming a Software Developer.</p>
+    </div>
+    <img src="linkedin.jpg" alt="Alex Smith" class="photo" width="500" height="400">
+    </section>   
+ <footer>   
+    <ul>  
+      <li> <i class="fa fa-map-marker">46 10th rd, Kew 2090</i></li>
+      <li>  <i class="fa fa-phone">0798209353</i></li>
+      <li> <i class="fa fa-envelope">vcudycudy@gmail.com</i></li>
+      <li><a href="https://facebook.com/vhukhudo.mulaudzi.36956"><i class=" fa fa-Facebook"></i></a></li>
+      <li><a href="https://www.linkedin.com/in/vhukhudomulaudzi"><i class="fa fa-linkedin-square"></i></a></li>
+    </ul>   
+ </footer>
+</div>
+    
+<!-- Modal -->
+  <div id="locationModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Your Location</h2>
+      <p id="locationText">Fetching location...</p>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(getExactLocation, showError);
+      } else {
+        showModal("Geolocation is not supported by this browser.");
+      }
+    };
+
+    function getExactLocation(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+
+      // Use OpenStreetMap's Nominatim API for reverse geocoding
+      const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const address = data.address;
+          const city = address.city || address.town || address.village || '';
+          const state = address.state || '';
+          const country = address.country || '';
+          showModal(`${city}, ${state}, ${country}`);
+        })
+        .catch(() => {
+          showModal("Unable to retrieve exact location.");
+        });
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          showModal("User denied the request for Geolocation.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          showModal("Location information is unavailable.");
+          break;
+        case error.TIMEOUT:
+          showModal("The request to get user location timed out.");
+          break;
+        case error.UNKNOWN_ERROR:
+          showModal("An unknown error occurred.");
+          break;
+      }
+    }
+
+    function showModal(message) {
+      document.getElementById("locationText").innerHTML = message;
+      document.getElementById("locationModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("locationModal").style.display = "none";
+    }
+  </script>
+</body>
+</html>
