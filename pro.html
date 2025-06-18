@@ -54,62 +54,91 @@
       <p id="locationText">Fetching location...</p>
     </div>
   </div>
+<!-- Modal -->
+  <div id="locationModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Your Location</h2>
+      <p id="locationText">Fetching location...</p>
+    </div>
+  </div>
 
   <script>
-    window.onload = function() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(getExactLocation, showError);
-      } else {
-        showModal("Geolocation is not supported by this browser.");
-      }
-    };
+    
+  const weatherApiKey = "4887c1de8dc5cc888bd67f31debb8449"; // Replace with your actual key
 
-    function getExactLocation(position) {
-      const lat = position.coords.latitude;
-      const lon = position.coords.longitude;
-
-      // Use OpenStreetMap's Nominatim API for reverse geocoding
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
-
-      fetch(url)
-        .then(response => response.json())
-        .then(data => {
-          const address = data.address;
-          const city = address.city || address.town || address.village || '';
-          const state = address.state || '';
-          const country = address.country || '';
-          showModal(`${city}, ${state}, ${country}`);
-        })
-        .catch(() => {
-          showModal("Unable to retrieve exact location.");
-        });
+  window.onload = function() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getExactLocation, showError);
+    } else {
+      showModal("Geolocation is not supported by this browser.");
     }
+  };
 
-    function showError(error) {
-      switch(error.code) {
-        case error.PERMISSION_DENIED:
-          showModal("User denied the request for Geolocation.");
-          break;
-        case error.POSITION_UNAVAILABLE:
-          showModal("Location information is unavailable.");
-          break;
-        case error.TIMEOUT:
-          showModal("The request to get user location timed out.");
-          break;
-        case error.UNKNOWN_ERROR:
-          showModal("An unknown error occurred.");
-          break;
-      }
-    }
+  function getExactLocation(position) {
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
 
-    function showModal(message) {
-      document.getElementById("locationText").innerHTML = message;
-      document.getElementById("locationModal").style.display = "block";
-    }
+    // Step 1: Get Address
+    const geoUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`;
 
-    function closeModal() {
-      document.getElementById("locationModal").style.display = "none";
+    fetch(geoUrl)
+      .then(response => response.json())
+      .then(data => {
+        const address = data.address;
+        const city = address.city || address.town || address.village || '';
+        const state = address.state || '';
+        const country = address.country || '';
+        const fullAddress = `${city}, ${state}, ${country}`;
+
+        // Step 2: Get Weather
+        const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${weatherApiKey}`;
+
+        fetch(weatherUrl)
+          .then(response => response.json())
+          .then(weatherData => {
+            const description = weatherData.weather[0].description;
+            const temp = weatherData.main.temp;
+            const weatherInfo = `Weather: ${description}, ${temp}°C`;
+
+            showModal(`${fullAddress}<br>${weatherInfo}`);
+          })
+          .catch(() => {
+            showModal(`${fullAddress}<br>Weather info unavailable.`);
+          });
+
+      })
+      .catch(() => {
+        showModal("Unable to retrieve exact location.");
+      });
+  }
+
+  function showError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        showModal("User denied the request for Geolocation.");
+        break;
+      case error.POSITION_UNAVAILABLE:
+        showModal("Location information is unavailable.");
+        break;
+      case error.TIMEOUT:
+        showModal("The request to get user location timed out.");
+        break;
+      case error.UNKNOWN_ERROR:
+        showModal("An unknown error occurred.");
+        break;
     }
-  </script>
+  }
+
+  function showModal(message) {
+    document.getElementById("locationText").innerHTML = message;
+    document.getElementById("locationModal").style.display = "block";
+  }
+
+  function closeModal() {
+    document.getElementById("locationModal").style.display = "none";
+  }
+</script>
+ 
 </body>
 </html>
